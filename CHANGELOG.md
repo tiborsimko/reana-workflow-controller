@@ -1,5 +1,89 @@
 # Changelog
 
+## [0.9.5](https://github.com/tiborsimko/reana-workflow-controller/compare/v0.9.4...0.9.5) (2025-04-25)
+
+
+### Build
+
+* **docker:** non-editable submodules in "latest" mode ([#551](https://github.com/tiborsimko/reana-workflow-controller/issues/551)) ([af74d0b](https://github.com/tiborsimko/reana-workflow-controller/commit/af74d0b887d02109ce96c91ef8fdf99e4eb4ff34))
+* **docker:** pin setuptools 70 ([#601](https://github.com/tiborsimko/reana-workflow-controller/issues/601)) ([be6a388](https://github.com/tiborsimko/reana-workflow-controller/commit/be6a3885f4f2e84ca77c7e09a89e5f2f06185452))
+* **python:** bump all required packages as of 2024-03-04 ([#574](https://github.com/tiborsimko/reana-workflow-controller/issues/574)) ([1373f4c](https://github.com/tiborsimko/reana-workflow-controller/commit/1373f4c3ea9480cc7ccb05ab12fc62a029e1f792))
+* **python:** bump shared REANA packages as of 2024-03-04 ([#574](https://github.com/tiborsimko/reana-workflow-controller/issues/574)) ([e31d903](https://github.com/tiborsimko/reana-workflow-controller/commit/e31d9038280a68ff84595caa64f010a4f25fc63a))
+* **python:** bump shared REANA packages as of 2024-11-28 ([#620](https://github.com/tiborsimko/reana-workflow-controller/issues/620)) ([179fa89](https://github.com/tiborsimko/reana-workflow-controller/commit/179fa89ccc4a5e77fca9efa403f4ad2003b40db3))
+
+
+### Features
+
+* **config:** upgrade to Jupyter SciPy 7.2.2 notebook ([#614](https://github.com/tiborsimko/reana-workflow-controller/issues/614)) ([72f0c4c](https://github.com/tiborsimko/reana-workflow-controller/commit/72f0c4c69759c8abf1d67c735232e5b6c033d504))
+* **helm:** allow cluster administrator to configure ingress host ([#588](https://github.com/tiborsimko/reana-workflow-controller/issues/588)) ([a7c9c85](https://github.com/tiborsimko/reana-workflow-controller/commit/a7c9c851277f3ca191c073fdc6c6d5d4149a95e8))
+* **manager:** call shutdown endpoint before workflow stop ([#559](https://github.com/tiborsimko/reana-workflow-controller/issues/559)) ([719fa37](https://github.com/tiborsimko/reana-workflow-controller/commit/719fa370839dd29ce8071b2d1e203ff37c5ff4f1))
+* **manager:** increase termination period of run-batch pods ([#572](https://github.com/tiborsimko/reana-workflow-controller/issues/572)) ([f05096a](https://github.com/tiborsimko/reana-workflow-controller/commit/f05096ac7d5c6e7a535772966ccbbb2e07a325ef))
+* **manager:** pass custom env variables to job controller ([#571](https://github.com/tiborsimko/reana-workflow-controller/issues/571)) ([646f071](https://github.com/tiborsimko/reana-workflow-controller/commit/646f071feb61c7b901cc8979b02bc846a3f0a343))
+* **manager:** pass custom env variables to workflow engines ([#571](https://github.com/tiborsimko/reana-workflow-controller/issues/571)) ([cb9369b](https://github.com/tiborsimko/reana-workflow-controller/commit/cb9369bb3ca6beb70d0693fef277df1958121169))
+* **manager:** pass K8s requests/limits to job controller ([#643](https://github.com/tiborsimko/reana-workflow-controller/issues/643)) ([71aa633](https://github.com/tiborsimko/reana-workflow-controller/commit/71aa633d83b97aa9f3a230b4845e3d27323d1bbf))
+* **sessions:** expose user secrets in interactive sessions ([#591](https://github.com/tiborsimko/reana-workflow-controller/issues/591)) ([784efee](https://github.com/tiborsimko/reana-workflow-controller/commit/784efee4be8b4a9785d03d3d05b00f3da2b455c2))
+
+
+### Bug fixes
+
+* add raw and human_readable format in size object ([af85c2b](https://github.com/tiborsimko/reana-workflow-controller/commit/af85c2bd542e2ba998fdff86487306b9cdcdc02b))
+* **config:** read secret key from env ([#615](https://github.com/tiborsimko/reana-workflow-controller/issues/615)) ([7df1279](https://github.com/tiborsimko/reana-workflow-controller/commit/7df1279f45e0981a06c3af705873c4d1d797404d))
+* **manager:** avoid privilege escalation in Kubernetes jobs ([#615](https://github.com/tiborsimko/reana-workflow-controller/issues/615)) ([24563e5](https://github.com/tiborsimko/reana-workflow-controller/commit/24563e568044e29d4399f78d8c081d144f116761))
+* **manager:** graceful shutdown of job-controller ([#559](https://github.com/tiborsimko/reana-workflow-controller/issues/559)) ([817b019](https://github.com/tiborsimko/reana-workflow-controller/commit/817b019b3745862436e99570c10c6d8ea35533f4))
+* **manager:** pass RabbitMQ connection details to workflow engine ([#615](https://github.com/tiborsimko/reana-workflow-controller/issues/615)) ([cf4ee73](https://github.com/tiborsimko/reana-workflow-controller/commit/cf4ee734788da33f15a80e1fc1f0b3233ea5a007))
+* **manager:** use valid group name when calling `groupadd` ([#566](https://github.com/tiborsimko/reana-workflow-controller/issues/566)) ([73a9929](https://github.com/tiborsimko/reana-workflow-controller/commit/73a9929a742e18a482824c2ca9a7c52f1f46227e)), closes [#561](https://github.com/tiborsimko/reana-workflow-controller/issues/561)
+* **set_workflow_status:** validate endpoint arguments ([#589](https://github.com/tiborsimko/reana-workflow-controller/issues/589)) ([5945d7f](https://github.com/tiborsimko/reana-workflow-controller/commit/5945d7fca095531b3601e551c527457f9413643c))
+* **stop:** store engine logs of stopped workflow ([#563](https://github.com/tiborsimko/reana-workflow-controller/issues/563)) ([199c163](https://github.com/tiborsimko/reana-workflow-controller/commit/199c16313d97932f80080585a0c617b6b0e3a78d)), closes [#560](https://github.com/tiborsimko/reana-workflow-controller/issues/560)
+
+
+### Code refactoring
+
+* **consumer:** do not update status of jobs ([#559](https://github.com/tiborsimko/reana-workflow-controller/issues/559)) ([5992034](https://github.com/tiborsimko/reana-workflow-controller/commit/599203403576784f6efabd158df7282431265cdc))
+* **docs:** move from reST to Markdown ([#567](https://github.com/tiborsimko/reana-workflow-controller/issues/567)) ([4fbdb74](https://github.com/tiborsimko/reana-workflow-controller/commit/4fbdb74a5351155b7e0ac4ac97114a8fa3ec60f5))
+
+
+### Code style
+
+* **black:** format with black v24 ([#564](https://github.com/tiborsimko/reana-workflow-controller/issues/564)) ([2329437](https://github.com/tiborsimko/reana-workflow-controller/commit/23294373b384e19280c00f3116100816e7277e40))
+
+
+### Test suite
+
+* adds requirements_dev for Travis ([56d5392](https://github.com/tiborsimko/reana-workflow-controller/commit/56d5392717159656deccca39997c4029da269f75))
+
+
+### Continuous integration
+
+* add hadolint and flake8 linters ([5757dfb](https://github.com/tiborsimko/reana-workflow-controller/commit/5757dfbbe9a296fe9b41b6ad1f93460976c77849))
+* added github actions workflow ([d128d58](https://github.com/tiborsimko/reana-workflow-controller/commit/d128d58d4da3f811ff736867355a3712f77d1b1b))
+* **commitlint:** addition of commit message linter ([#555](https://github.com/tiborsimko/reana-workflow-controller/issues/555)) ([b9df20a](https://github.com/tiborsimko/reana-workflow-controller/commit/b9df20a78d36b6fb664fc69127ace5d9cdd73830))
+* **commitlint:** allow release commit style ([#575](https://github.com/tiborsimko/reana-workflow-controller/issues/575)) ([b013d49](https://github.com/tiborsimko/reana-workflow-controller/commit/b013d49e61b372b9ac4f8a9f1e7ceafae64295f1))
+* **commitlint:** check for the presence of concrete PR number ([#562](https://github.com/tiborsimko/reana-workflow-controller/issues/562)) ([4b8f539](https://github.com/tiborsimko/reana-workflow-controller/commit/4b8f53909d281dcd2445833544c4107c8ebd1d81))
+* **commitlint:** consider commit body full stop as warning ([#643](https://github.com/tiborsimko/reana-workflow-controller/issues/643)) ([ee9210e](https://github.com/tiborsimko/reana-workflow-controller/commit/ee9210e4ecc834d79c721ac68dd99427ef206b78))
+* pin hadolint version ([6b4991a](https://github.com/tiborsimko/reana-workflow-controller/commit/6b4991a4773b08d2378bec99a6888105f8ed1cff))
+* publish docker image after new release ([98e6c9a](https://github.com/tiborsimko/reana-workflow-controller/commit/98e6c9a1f0239211a37e252e98a30c0b51c5e7f5))
+* **pytest:** move to PostgreSQL 14.10 ([#568](https://github.com/tiborsimko/reana-workflow-controller/issues/568)) ([9b6bfa0](https://github.com/tiborsimko/reana-workflow-controller/commit/9b6bfa0b5057d849f8667ee0642765150e2b52d9))
+* **release-please:** initial configuration ([#555](https://github.com/tiborsimko/reana-workflow-controller/issues/555)) ([672083d](https://github.com/tiborsimko/reana-workflow-controller/commit/672083de4c943a1c32b0a093542919b72102b491))
+* **release-please:** update version in Dockerfile/OpenAPI specs ([#558](https://github.com/tiborsimko/reana-workflow-controller/issues/558)) ([4be8086](https://github.com/tiborsimko/reana-workflow-controller/commit/4be8086874b1eb7e355a75ef0e79467b0a9db875))
+* remove older versions from python tests ([ddafbf0](https://github.com/tiborsimko/reana-workflow-controller/commit/ddafbf01170e433daceead05c2552c57d19f907b))
+* **runners:** upgrade CI runners to Ubuntu 22.04 ([#647](https://github.com/tiborsimko/reana-workflow-controller/issues/647)) ([2b004ce](https://github.com/tiborsimko/reana-workflow-controller/commit/2b004ce78456a31f398bbd9deb43b52f028f2d3a))
+* set SHARED_VOLUME_PATH for tests to work ([4701718](https://github.com/tiborsimko/reana-workflow-controller/commit/470171808bdb21e7917671c54fe2e0331f1ee67a))
+* **shellcheck:** fix exit code propagation ([#562](https://github.com/tiborsimko/reana-workflow-controller/issues/562)) ([c5d4982](https://github.com/tiborsimko/reana-workflow-controller/commit/c5d498299f8524f016f4e8c33c9ac0e90b644cb7))
+* update all actions ([d60f9d1](https://github.com/tiborsimko/reana-workflow-controller/commit/d60f9d1b70ba4324dc354604b77ae51272d788b9))
+
+
+### Documentation
+
+* add .readthedocs.yaml to migrate to RTD v2 ([3125ca8](https://github.com/tiborsimko/reana-workflow-controller/commit/3125ca819ce5005c97dfbf5c19936e60781622d4))
+* **authors:** complete list of contributors ([#570](https://github.com/tiborsimko/reana-workflow-controller/issues/570)) ([08ab9a3](https://github.com/tiborsimko/reana-workflow-controller/commit/08ab9a3358ee8b027a62e1a528f7e135a676b55a))
+* better navigation and synced descriptions ([5a67cb7](https://github.com/tiborsimko/reana-workflow-controller/commit/5a67cb7a2eb207e7faee7f43e68122bef685a8df))
+* improve sphinxcontrib-openapi rendering ([c830300](https://github.com/tiborsimko/reana-workflow-controller/commit/c830300a2f296b4f3ba10c5540cbcc6f3bb65eb3))
+* new logo, panel verbiage and links ([95944af](https://github.com/tiborsimko/reana-workflow-controller/commit/95944af6dd33afd3b50c39ae6d71cd71e2e8b723))
+* openapi specs with disk usage ([5f45c4c](https://github.com/tiborsimko/reana-workflow-controller/commit/5f45c4c4aa834e0a7c4fc9820873e5f86a229f41))
+* set default language to English ([0cde3b2](https://github.com/tiborsimko/reana-workflow-controller/commit/0cde3b2b50dcbbf1c201ca5b0d8cd297acf13ecd))
+* single-page RTFD outline ([b86fd15](https://github.com/tiborsimko/reana-workflow-controller/commit/b86fd1509100a513fcb6d63106c73d01685b1485))
+* update changelog ([301946f](https://github.com/tiborsimko/reana-workflow-controller/commit/301946fd9c8c1a6299c3fa4ed03532488e8e16c1))
+
 ## [0.9.4](https://github.com/reanahub/reana-workflow-controller/compare/0.9.3...0.9.4) (2024-11-29)
 
 
