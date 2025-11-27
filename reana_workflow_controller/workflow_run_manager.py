@@ -75,9 +75,15 @@ from reana_workflow_controller.config import (  # isort:skip
     REANA_INTERACTIVE_SESSIONS_ENVIRONMENTS,
     REANA_INTERACTIVE_SESSIONS_RECOMMENDED_IMAGES,
     REANA_RUNTIME_BATCH_TERMINATION_GRACE_PERIOD,
-    REANA_KUBERNETES_JOBS_MAX_USER_MEMORY_LIMIT,
+    REANA_KUBERNETES_JOBS_CPU_REQUEST,
+    REANA_KUBERNETES_JOBS_CPU_LIMIT,
+    REANA_KUBERNETES_JOBS_MEMORY_REQUEST,
     REANA_KUBERNETES_JOBS_MEMORY_LIMIT,
     REANA_KUBERNETES_JOBS_TIMEOUT_LIMIT,
+    REANA_KUBERNETES_JOBS_MAX_USER_CPU_REQUEST,
+    REANA_KUBERNETES_JOBS_MAX_USER_CPU_LIMIT,
+    REANA_KUBERNETES_JOBS_MAX_USER_MEMORY_REQUEST,
+    REANA_KUBERNETES_JOBS_MAX_USER_MEMORY_LIMIT,
     REANA_KUBERNETES_JOBS_MAX_USER_TIMEOUT_LIMIT,
     REANA_WORKFLOW_ENGINE_IMAGE_CWL,
     REANA_WORKFLOW_ENGINE_IMAGE_SERIAL,
@@ -766,8 +772,32 @@ class KubernetesWorkflowRunManager(WorkflowRunManager):
                     ),
                 },
                 {
+                    "name": "REANA_KUBERNETES_JOBS_CPU_REQUEST",
+                    "value": REANA_KUBERNETES_JOBS_CPU_REQUEST,
+                },
+                {
+                    "name": "REANA_KUBERNETES_JOBS_CPU_LIMIT",
+                    "value": REANA_KUBERNETES_JOBS_CPU_LIMIT,
+                },
+                {
+                    "name": "REANA_KUBERNETES_JOBS_MEMORY_REQUEST",
+                    "value": REANA_KUBERNETES_JOBS_MEMORY_REQUEST,
+                },
+                {
                     "name": "REANA_KUBERNETES_JOBS_MEMORY_LIMIT",
                     "value": REANA_KUBERNETES_JOBS_MEMORY_LIMIT,
+                },
+                {
+                    "name": "REANA_KUBERNETES_JOBS_MAX_USER_CPU_REQUEST",
+                    "value": REANA_KUBERNETES_JOBS_MAX_USER_CPU_REQUEST,
+                },
+                {
+                    "name": "REANA_KUBERNETES_JOBS_MAX_USER_CPU_LIMIT",
+                    "value": REANA_KUBERNETES_JOBS_MAX_USER_CPU_LIMIT,
+                },
+                {
+                    "name": "REANA_KUBERNETES_JOBS_MAX_USER_MEMORY_REQUEST",
+                    "value": REANA_KUBERNETES_JOBS_MAX_USER_MEMORY_REQUEST,
                 },
                 {
                     "name": "REANA_KUBERNETES_JOBS_MAX_USER_MEMORY_LIMIT",
