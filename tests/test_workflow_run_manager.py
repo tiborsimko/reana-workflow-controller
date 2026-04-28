@@ -167,7 +167,7 @@ def test_interactive_session_closure(sample_serial_workflow_in_db, session):
             )
             assert int_session.status == RunStatus.created
             kwrm.stop_interactive_session(int_session.id_)
-            assert not workflow.sessions.first()
+            assert not workflow.sessions
 
 
 def test_container_image_aliases():
