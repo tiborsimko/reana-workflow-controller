@@ -52,7 +52,7 @@ docker_build() {
 }
 
 docs_openapi() {
-    FLASK_APP=reana_workflow_controller/app.py python ./scripts/generate_openapi_spec.py
+    FLASK_APP=reana_workflow_controller/app.py REANA_SECRET_KEY=SECRET_KEY python ./scripts/generate_openapi_spec.py
     diff -q -w temp_openapi.json docs/openapi.json
     rm temp_openapi.json
 }

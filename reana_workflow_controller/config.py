@@ -44,7 +44,7 @@ def compose_reana_url(hostname: str, hostport: str | int) -> str:
     return f"https://{hostname}:{hostport}"
 
 
-SECRET_KEY = os.getenv("REANA_SECRET_KEY", "CHANGE_ME")
+SECRET_KEY = os.getenv("REANA_SECRET_KEY", "")
 """Secret key used for the application user sessions."""
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -347,11 +347,11 @@ JOB_CONTROLLER_NAME = "job-controller"
 WORKFLOW_ENGINE_NAME = "workflow-engine"
 """Default workflow engine container name."""
 
-REANA_GITLAB_HOST = os.getenv("REANA_GITLAB_HOST", "CHANGE_ME")
+REANA_GITLAB_HOST = os.getenv("REANA_GITLAB_HOST", "")
 """GitLab API HOST"""
 
-REANA_GITLAB_URL = "https://{}".format(REANA_GITLAB_HOST)
-"""GitLab API URL"""
+REANA_GITLAB_URL = "https://{}".format(REANA_GITLAB_HOST) if REANA_GITLAB_HOST else ""
+"""GitLab API URL, empty when GitLab is not configured."""
 
 REANA_HOSTNAME = os.getenv("REANA_HOSTNAME", "localhost")
 """REANA host name."""

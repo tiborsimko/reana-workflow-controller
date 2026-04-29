@@ -55,6 +55,15 @@ def create_app(config_mapping=None):
     if config_mapping:
         app.config.from_mapping(config_mapping)
 
+    if not app.config.get("SECRET_KEY"):
+        raise ValueError(
+            "SECRET_KEY is unset. Provide a strong random value via "
+            "secrets.reana.REANA_SECRET_KEY in your Helm values, e.g. "
+            "`--set secrets.reana.REANA_SECRET_KEY=$(openssl rand -hex 32)`. "
+            "For existing clusters that need to rotate, see: "
+            "https://blog.reana.io/posts/2024/reana-0.9.4/"
+        )
+
     # Register API routes
     from reana_workflow_controller.rest import (
         workflows_session,
