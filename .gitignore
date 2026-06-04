@@ -71,3 +71,6 @@ target/
 
 # PyCharm files
 .idea
+
+# REANA modules for local development
+modules/
