@@ -482,8 +482,59 @@ def _parse_comma_separated_list(value: str) -> List[str]:
     return [x.strip() for x in value.split(",") if x.strip()]
 
 
+_VALID_RUNTIME_FS_GROUP_CHANGE_POLICIES = {"Always", "OnRootMismatch"}
+"""Valid REANA runtime pod fsGroup change policy values."""
+
+
+def _parse_runtime_fs_group_change_policy(value: str | None) -> str:
+    """Parse runtime pod fsGroup change policy configuration."""
+    policy = (value or "").strip()
+    if not policy:
+        return "OnRootMismatch"
+    if policy not in _VALID_RUNTIME_FS_GROUP_CHANGE_POLICIES:
+        valid_values = ", ".join(sorted(_VALID_RUNTIME_FS_GROUP_CHANGE_POLICIES))
+        raise ValueError(
+            "Invalid REANA_RUNTIME_FS_GROUP_CHANGE_POLICY value: "
+            f"{policy}. Valid values: {valid_values}"
+        )
+    return policy
+
+
+def _parse_runtime_sessions_supplemental_groups(value: str | None) -> List[int]:
+    """Parse supplemental groups for runtime interactive-session pods."""
+    raw_groups = "100" if value is None else value
+    parsed_groups = []
+    for group_value in _parse_comma_separated_list(raw_groups):
+        try:
+            group_id = int(group_value)
+        except ValueError as exc:
+            raise ValueError(
+                "Invalid REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS value: "
+                f"{group_value}. Values must be non-negative integers."
+            ) from exc
+        if group_id < 0:
+            raise ValueError(
+                "Invalid REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS value: "
+                f"{group_value}. Values must be non-negative integers."
+            )
+        parsed_groups.append(group_id)
+    return parsed_groups
+
+
 WORKSPACE_DISPLAY_FILE_LIMIT = int(os.getenv("WORKSPACE_DISPLAY_FILE_LIMIT", "100000"))
 """Maximum number of file entries returned by workspace listing endpoints."""
+
+REANA_RUNTIME_FS_GROUP_CHANGE_POLICY = _parse_runtime_fs_group_change_policy(
+    os.getenv("REANA_RUNTIME_FS_GROUP_CHANGE_POLICY")
+)
+"""Policy controlling runtime pod fsGroup ownership updates."""
+
+REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS = (
+    _parse_runtime_sessions_supplemental_groups(
+        os.getenv("REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS")
+    )
+)
+"""Supplemental groups applied to interactive-session pods."""
 
 _VALID_GC_COMMANDS = {"ls", "list", "rm", "delete"}
 """Valid FORCE_GARBAGE_COLLECTION command values."""

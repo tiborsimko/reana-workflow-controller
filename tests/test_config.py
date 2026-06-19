@@ -62,3 +62,86 @@ def test_force_garbage_collection_accepts_valid_values(monkeypatch):
         ]
 
     _reload_config()
+
+
+def test_runtime_fs_group_change_policy_defaults_to_on_root_mismatch(monkeypatch):
+    """Test runtime fsGroup change policy defaults to OnRootMismatch."""
+    with monkeypatch.context() as m:
+        m.delenv("REANA_RUNTIME_FS_GROUP_CHANGE_POLICY", raising=False)
+        reloaded_config = _reload_config()
+        assert reloaded_config.REANA_RUNTIME_FS_GROUP_CHANGE_POLICY == "OnRootMismatch"
+
+    _reload_config()
+
+
+def test_runtime_fs_group_change_policy_accepts_always(monkeypatch):
+    """Test runtime fsGroup change policy accepts supported values."""
+    with monkeypatch.context() as m:
+        m.setenv("REANA_RUNTIME_FS_GROUP_CHANGE_POLICY", "Always")
+        reloaded_config = _reload_config()
+        assert reloaded_config.REANA_RUNTIME_FS_GROUP_CHANGE_POLICY == "Always"
+
+    _reload_config()
+
+
+def test_runtime_fs_group_change_policy_rejects_invalid_value(monkeypatch):
+    """Test runtime fsGroup change policy rejects unsupported values."""
+    with monkeypatch.context() as m:
+        m.setenv("REANA_RUNTIME_FS_GROUP_CHANGE_POLICY", "Never")
+        with pytest.raises(ValueError) as exc_info:
+            _reload_config()
+        assert (
+            str(exc_info.value)
+            == "Invalid REANA_RUNTIME_FS_GROUP_CHANGE_POLICY value: Never. "
+            "Valid values: Always, OnRootMismatch"
+        )
+
+    _reload_config()
+
+
+def test_runtime_sessions_supplemental_groups_defaults_to_users_gid(monkeypatch):
+    """Test session supplemental groups default to the Jupyter users group."""
+    with monkeypatch.context() as m:
+        m.delenv("REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS", raising=False)
+        reloaded_config = _reload_config()
+        assert reloaded_config.REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS == [100]
+
+    _reload_config()
+
+
+def test_runtime_sessions_supplemental_groups_accepts_empty_string(monkeypatch):
+    """Test empty supplemental groups omit the pod supplementalGroups field."""
+    with monkeypatch.context() as m:
+        m.setenv("REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS", "")
+        reloaded_config = _reload_config()
+        assert reloaded_config.REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS == []
+
+    _reload_config()
+
+
+def test_runtime_sessions_supplemental_groups_parses_integers(monkeypatch):
+    """Test runtime session supplemental groups parse comma-separated integers."""
+    with monkeypatch.context() as m:
+        m.setenv("REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS", "100, 2000,")
+        reloaded_config = _reload_config()
+        assert reloaded_config.REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS == [
+            100,
+            2000,
+        ]
+
+    _reload_config()
+
+
+def test_runtime_sessions_supplemental_groups_reject_invalid_values(monkeypatch):
+    """Test runtime session supplemental groups reject invalid values."""
+    with monkeypatch.context() as m:
+        m.setenv("REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS", "100,abc")
+        with pytest.raises(ValueError) as exc_info:
+            _reload_config()
+        assert (
+            str(exc_info.value)
+            == "Invalid REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS value: abc. "
+            "Values must be non-negative integers."
+        )
+
+    _reload_config()

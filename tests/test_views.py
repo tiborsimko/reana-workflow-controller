@@ -17,6 +17,7 @@ import fs
 import mock
 import pytest
 from flask import url_for
+from reana_commons.config import WORKFLOW_RUNTIME_USER_GID, WORKFLOW_RUNTIME_USER_UID
 from reana_db.database import Session
 from reana_db.models import (
     InteractiveSession,
@@ -25,6 +26,10 @@ from reana_db.models import (
     RunStatus,
     Workflow,
     UserWorkflow,
+)
+from reana_workflow_controller.config import (
+    REANA_RUNTIME_FS_GROUP_CHANGE_POLICY,
+    REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS,
 )
 from reana_workflow_controller.rest.utils import (
     create_workflow_workspace,
@@ -1870,7 +1875,7 @@ def test_create_interactive_session(
             current_k8s_networking_api_client=mock.DEFAULT,
             current_k8s_appsv1_api_client=mock.DEFAULT,
             UserSecretsStore=mock.DEFAULT,
-        ):
+        ) as mocks:
             res = client.post(
                 url_for(
                     "workflows_session.open_interactive_session",
@@ -1880,6 +1885,69 @@ def test_create_interactive_session(
                 query_string={"user": user0.id_},
             )
             assert res.json == expected_data
+            deployment = mocks[
+                "current_k8s_appsv1_api_client"
+            ].create_namespaced_deployment.call_args[0][1]
+            pod = deployment.spec.template.spec
+            container = pod.containers[0]
+
+            assert pod.security_context.fs_group == int(WORKFLOW_RUNTIME_USER_GID)
+            assert (
+                pod.security_context.fs_group_change_policy
+                == REANA_RUNTIME_FS_GROUP_CHANGE_POLICY
+            )
+            assert (
+                pod.security_context.supplemental_groups
+                == REANA_RUNTIME_SESSIONS_SUPPLEMENTAL_GROUPS
+            )
+            assert container.security_context.run_as_user == int(
+                WORKFLOW_RUNTIME_USER_UID
+            )
+            assert container.security_context.run_as_group == int(
+                WORKFLOW_RUNTIME_USER_GID
+            )
+            assert container.security_context.run_as_non_root is True
+            assert container.security_context.allow_privilege_escalation is False
+            assert container.security_context.capabilities.drop == ["ALL"]
+            assert container.security_context.seccomp_profile.type == "RuntimeDefault"
+
+
+def test_create_interactive_session_skips_security_context_when_disabled(
+    app,
+    user0,
+    sample_serial_workflow_in_db,
+    interactive_session_environments,
+    monkeypatch,
+):
+    """Test create interactive session without explicit security contexts."""
+    wrm = WorkflowRunManager(sample_serial_workflow_in_db)
+    expected_data = {"path": wrm._generate_interactive_workflow_path()}
+    monkeypatch.setattr("reana_workflow_controller.k8s.K8S_USE_SECURITY_CONTEXT", False)
+
+    with app.test_client() as client:
+        with mock.patch.multiple(
+            "reana_workflow_controller.k8s",
+            current_k8s_corev1_api_client=mock.DEFAULT,
+            current_k8s_networking_api_client=mock.DEFAULT,
+            current_k8s_appsv1_api_client=mock.DEFAULT,
+            UserSecretsStore=mock.DEFAULT,
+        ) as mocks:
+            res = client.post(
+                url_for(
+                    "workflows_session.open_interactive_session",
+                    workflow_id_or_name=sample_serial_workflow_in_db.id_,
+                    interactive_session_type="jupyter",
+                ),
+                query_string={"user": user0.id_},
+            )
+            assert res.json == expected_data
+            deployment = mocks[
+                "current_k8s_appsv1_api_client"
+            ].create_namespaced_deployment.call_args[0][1]
+            pod = deployment.spec.template.spec
+
+            assert pod.security_context is None
+            assert pod.containers[0].security_context is None
 
 
 def test_create_interactive_session_unknown_type(
