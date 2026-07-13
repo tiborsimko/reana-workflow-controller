@@ -32,7 +32,7 @@ from flask import jsonify, request, send_file
 from git import Repo
 from kubernetes.client.rest import ApiException
 from reana_commons import workspace
-from reana_commons.config import REANA_WORKFLOW_UMASK, WORKFLOW_TIME_FORMAT
+from reana_commons.config import WORKFLOW_TIME_FORMAT
 from reana_commons.k8s.secrets import UserSecretsStore
 from reana_commons.utils import (
     get_workflow_status_change_verb,
@@ -396,7 +396,6 @@ def create_workflow_workspace(
     :param path: Relative path to workspace directory.
     :return: Absolute workspace path.
     """
-    os.umask(REANA_WORKFLOW_UMASK)
     os.makedirs(path, exist_ok=True)
     if git_url and git_ref:
         user_secrets = UserSecretsStore.fetch(user_id)

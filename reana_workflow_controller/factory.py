@@ -11,10 +11,11 @@
 from __future__ import absolute_import
 
 import logging
+import os
 
 from flask import Flask, jsonify
 from marshmallow.exceptions import ValidationError
-from reana_commons.config import REANA_LOG_FORMAT, REANA_LOG_LEVEL
+from reana_commons.config import REANA_LOG_FORMAT, REANA_LOG_LEVEL, REANA_WORKFLOW_UMASK
 from reana_db.database import Session
 from werkzeug.exceptions import UnprocessableEntity
 
@@ -50,6 +51,7 @@ def handle_args_validation_error(error: UnprocessableEntity):
 def create_app(config_mapping=None):
     """REANA Workflow Controller application factory."""
     logging.basicConfig(level=REANA_LOG_LEVEL, format=REANA_LOG_FORMAT)
+    os.umask(REANA_WORKFLOW_UMASK)
     app = Flask(__name__)
     app.config.from_object("reana_workflow_controller.config")
     if config_mapping:
