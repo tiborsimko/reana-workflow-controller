@@ -11,7 +11,6 @@ import os
 import yaml
 
 from flask import current_app
-
 from kubernetes import client
 
 from reana_db.database import Session
@@ -23,6 +22,7 @@ from reana_commons.config import (
     K8S_USE_SECURITY_CONTEXT,
     KRB5_STATUS_FILE_LOCATION,
     REANA_JOB_HOSTPATH_MOUNTS,
+    REANA_WORKFLOW_UMASK,
     WORKFLOW_RUNTIME_USER_GID,
     WORKFLOW_RUNTIME_USER_UID,
     REANA_RUNTIME_KUBERNETES_NAMESPACE,
@@ -217,7 +217,7 @@ class DaskResourceManager:
 
         # Create the worker command
         self.cluster_body["spec"]["worker"]["spec"]["containers"][0]["args"] = [
-            f"cd {self.workflow_workspace} && exec dask-worker --name $(DASK_WORKER_NAME) --dashboard --dashboard-address 8788 --nthreads {self.num_of_threads} --memory-limit {self.single_worker_memory}"
+            f"cd {self.workflow_workspace} && umask {REANA_WORKFLOW_UMASK:04o} && exec dask-worker --name $(DASK_WORKER_NAME) --dashboard --dashboard-address 8788 --nthreads {self.num_of_threads} --memory-limit {self.single_worker_memory}"
         ]
 
         # Set resource limits for workers

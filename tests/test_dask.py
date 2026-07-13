@@ -10,7 +10,12 @@ from uuid import uuid4
 from flask import current_app
 from mock import patch, MagicMock
 
-from reana_commons.config import WORKFLOW_RUNTIME_USER_GID, WORKFLOW_RUNTIME_USER_UID
+from reana_commons.config import (
+    REANA_WORKFLOW_UMASK,
+    WORKFLOW_RUNTIME_USER_GID,
+    WORKFLOW_RUNTIME_USER_UID,
+)
+
 from reana_workflow_controller.config import REANA_RUNTIME_FS_GROUP_CHANGE_POLICY
 from reana_workflow_controller.dask import requires_dask
 
@@ -443,7 +448,7 @@ def test_prepare_cluster(dask_resource_manager):
             "env"
         ]
 
-        expected_command = f"cd {dask_resource_manager.workflow_workspace} && exec dask-worker --name $(DASK_WORKER_NAME) --dashboard --dashboard-address 8788 --nthreads 8 --memory-limit 256Mi"
+        expected_command = f"cd {dask_resource_manager.workflow_workspace} && umask {REANA_WORKFLOW_UMASK:04o} && exec dask-worker --name $(DASK_WORKER_NAME) --dashboard --dashboard-address 8788 --nthreads 8 --memory-limit 256Mi"
         assert (
             dask_resource_manager.cluster_body["spec"]["worker"]["spec"]["containers"][
                 0
